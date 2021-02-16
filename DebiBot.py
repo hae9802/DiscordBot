@@ -14,6 +14,7 @@ from discord.enums import ActivityType
 from discord.ext import commands
 
 client = commands.Bot(command_prefix='!')
+token = os.environ['token']
 
 # When the Bot RUN -> Status Change
 @client.event
@@ -163,7 +164,7 @@ async def 도움말(ctx):
     embed.add_field(
         name="가위바위보", value="사용 방법 : !가위바위보 가위 or 바위 or 보", inline=False)
     embed.add_field(name="프로필확인", value="사용 방법 : !사진 @mention", inline=False)
-    embed.add_field(name="전적검색 (솔랭)", value="사용 방법 : !솔랭 소환사이름", inline=False)
+    embed.add_field(name="전적검색", value="사용 방법 : !전적 소환사이름", inline=False)
 
     embed.set_thumbnail(url=" https://han.gl/RYcbw")
     try:
@@ -188,9 +189,9 @@ async def 사진(ctx, user: discord.User):
     await ctx.send(embed=embed)
 
 
-# !솔랭 -> ex) !솔랭 소환사이름
+# !전적 -> ex) !전적 소환사이름
 @client.command()
-async def 솔랭(ctx, summonerName):
+async def 전적(ctx, summonerName):
     Si = riot.get_SummonerId(summonerName)
     if Si == 404:
         embed = discord.Embed(title="Unknown!", description="소환사 정보가 없습니다", color=0x00ffff)
@@ -208,36 +209,40 @@ async def 솔랭(ctx, summonerName):
         embed.add_field(name= "UNRANKED", value="아직 배치를 완료하지 않았습니다", inline=False)
         await ctx.send(embed=embed)
         return None
+
+    for idx, i in enumerate(Sr):
+        if idx == 0:
+            embed = discord.Embed(title=Si['name'], color=0x00ffff)
+            embed.add_field(name= "Level", value=str(Si['summonerLevel']), inline=False)
+        else:
+            embed = discord.Embed(title=None, color=0x00ffff)
+        embed.add_field(name= str(i['queueType']),
+            value=str(i['tier']) + ' ' + str(i['rank']) + ' ' + str(i['leaguePoints']) + str('LP'), inline=False)
+        embed.add_field(name= "Win Rate",
+            value=f"{i['wins'] + i['losses']}전 {i['wins']}승 {i['losses']}패 ({round(i['wins']/(i['wins'] + i['losses']) * 100, 2)}%) ", inline=False)
+        embed.set_thumbnail(url=f"http://z.fow.kr/img/emblem/{i['tier'].lower()}.png")
+        await ctx.send(embed=embed)
     
-    Sr = Sr[0]
-    embed = discord.Embed(title=Si['name'], color=0x00ffff)
-    embed.add_field(name= "Level", value=str(Si['summonerLevel']), inline=False)
-    embed.add_field(name= "Solo Rank Tier",
-        value=str(Sr['tier']) + ' ' + str(Sr['rank']) + ' ' + str(Sr['leaguePoints']) + str('LP'), inline=False)
-    embed.add_field(name= "Win Rate",
-        value=f"{Sr['wins'] + Sr['losses']}전 {Sr['wins']}승 {Sr['losses']}패 ({round(Sr['wins']/(Sr['wins'] + Sr['losses']) * 100, 2)}%) ", inline=False)
-
-    await ctx.send(embed=embed)
 
 
 
-# reaction added Event
-@client.event
-async def on_reaction_add(reaction, user):
-    if user.id == client.user.id:
-        return None
-    print(reaction.message.author.name)
-    print(reaction.emoji)
-    print(user.name)
+# # reaction added Event
+# @client.event
+# async def on_reaction_add(reaction, user):
+#     if user.id == client.user.id:
+#         return None
+#     print(reaction.message.author.name)
+#     print(reaction.emoji)
+#     print(user.name)
 
-@client.event
-async def on_reaction_remove(reaction, user):
-    if(user.id == client.user.id):
-        return None
-    print(reaction.message.author.name)
-    print(reaction.emoji)
-    print(user.name)
+# @client.event
+# async def on_reaction_remove(reaction, user):
+#     if(user.id == client.user.id):
+#         return None
+#     print(reaction.message.author.name)
+#     print(reaction.emoji)
+#     print(user.name)
 
 
 # client Start
-client.run(os.environ['token'])
+client.run(token)
