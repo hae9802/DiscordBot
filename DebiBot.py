@@ -165,6 +165,7 @@ async def 도움말(ctx):
         name="가위바위보", value="사용 방법 : !가위바위보 가위 or 바위 or 보", inline=False)
     embed.add_field(name="프로필확인", value="사용 방법 : !사진 @mention", inline=False)
     embed.add_field(name="전적검색", value="사용 방법 : !전적 소환사이름", inline=False)
+    embed.add_field(name="팀 분배", value="사용 방법 : !사다리 이름,이름...,이름 (이름을 콤마로 이어주세요)", inline=False)
 
     embed.set_thumbnail(url=" https://han.gl/RYcbw")
     try:
@@ -222,7 +223,32 @@ async def 전적(ctx, summonerName):
             value=f"{i['wins'] + i['losses']}전 {i['wins']}승 {i['losses']}패 ({round(i['wins']/(i['wins'] + i['losses']) * 100, 2)}%) ", inline=False)
         embed.set_thumbnail(url=f"http://z.fow.kr/img/emblem/{i['tier'].lower()}.png")
         await ctx.send(embed=embed)
-    
+
+
+
+@client.command()
+async def 사다리(ctx, name):
+    list = name.split(',')
+    endList1 = []
+    endList2 = []
+    if len(list) % 2 != 0:
+        await ctx.send("인원이 맞지 않습니다")
+        return None
+
+    for i in range(len(list)):
+        if random.randrange(1,3) == 1 and len(endList1) < len(list) / 2:
+            endList1.append(list[i])
+        else:
+            endList2.append(list[i])
+
+    for i in range(len(endList1)):
+        print(endList1[i])
+    for i in range(len(endList2)):
+        print(endList2[i])
+    embed = discord.Embed(title="사다리 결과", color=0x00ff00)
+    embed.add_field(name="1", value='\n'.join(endList1), inline=False)
+    embed.add_field(name="2", value='\n'.join(endList2), inline=False)
+    await ctx.send(embed=embed)
 
 
 
