@@ -165,7 +165,7 @@ async def 도움말(ctx):
         name="가위바위보", value="사용 방법 : !가위바위보 가위 or 바위 or 보", inline=False)
     embed.add_field(name="프로필확인", value="사용 방법 : !사진 @mention", inline=False)
     embed.add_field(name="전적검색", value="사용 방법 : !전적 소환사이름", inline=False)
-    embed.add_field(name="팀 분배", value="사용 방법 : !사다리 이름,이름...,이름 (이름을 콤마로 이어주세요)", inline=False)
+    embed.add_field(name="팀 분배", value="사용 방법 : !팀 이름,이름...,이름 (이름을 콤마로 이어주세요)", inline=False)
 
     embed.set_thumbnail(url=" https://han.gl/RYcbw")
     try:
@@ -227,7 +227,7 @@ async def 전적(ctx, summonerName):
 
 
 @client.command()
-async def 사다리(ctx, name):
+async def 팀(ctx, name):
     list = name.split(',')
     endList1 = []
     endList2 = []
@@ -241,13 +241,9 @@ async def 사다리(ctx, name):
         else:
             endList2.append(list[i])
 
-    for i in range(len(endList1)):
-        print(endList1[i])
-    for i in range(len(endList2)):
-        print(endList2[i])
     embed = discord.Embed(title="사다리 결과", color=0x00ff00)
-    embed.add_field(name="1", value='\n'.join(endList1), inline=False)
-    embed.add_field(name="2", value='\n'.join(endList2), inline=False)
+    embed.add_field(name="1팀", value='\n'.join(endList1), inline=False)
+    embed.add_field(name="2팀", value='\n'.join(endList2), inline=False)
     await ctx.send(embed=embed)
 
 
