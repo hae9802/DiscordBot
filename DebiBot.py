@@ -166,7 +166,7 @@ async def 도움말(ctx):
         name="가위바위보", value="사용 방법 : !가위바위보 가위 or 바위 or 보", inline=False)
     embed.add_field(name="프로필확인", value="사용 방법 : !사진 @mention", inline=False)
     embed.add_field(name="전적검색", value="사용 방법 : !전적 소환사이름", inline=False)
-    embed.add_field(name="팀 분배", value="사용 방법 : !팀 이름,이름...,이름 (이름을 콤마로 이어주세요)", inline=False)
+    embed.add_field(name="팀 분배", value="사용 방법 : !팀 팀수 이름,이름...,이름 (이름을 콤마로 이어주세요)", inline=False)
 
     embed.set_thumbnail(url=" https://han.gl/RYcbw")
     try:
@@ -228,15 +228,13 @@ async def 전적(ctx, summonerName):
 
 
 @client.command()
-async def 팀(ctx, teams, name):
-    tList = teams.split(',')
+async def 팀(ctx, teams: int, name):
     nList = name.split(',')
 
-    tlen = len(tList)
     nlen = len(nList)
-    teamMax = nlen / tlen
+    teamMax = nlen / teams
 
-    if nlen % tlen != 0:
+    if nlen % teams != 0:
         await ctx.send("입력을 확인해 주세요")
         return None
     
@@ -250,7 +248,7 @@ async def 팀(ctx, teams, name):
         del nList[nList.index(nList[ind])]
         nlen = len(nList)
         if len(tmpList) == teamMax:
-            embed.add_field(name=f"{tList[count]}", value=' '.join(tmpList), inline=False)
+            embed.add_field(name=f"{count + 1}팀", value=' '.join(tmpList), inline=False)
             count += 1
             tmpList.clear()
     
