@@ -21,7 +21,7 @@ token = os.environ['token']
 @client.event
 async def on_ready():
     print(client.user.name, 'has connected to Discord!')
-    await client.change_presence(status=discord.Status.online, activity=discord.Game("업데이트"))
+    await client.change_presence(status=discord.Status.online, activity=discord.Game("!도움말"))
     print("[Bot : ready]")
 
 
