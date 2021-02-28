@@ -14,13 +14,14 @@ from discord.enums import ActivityType
 from discord.ext import commands
 
 client = commands.Bot(command_prefix='!')
+
 token = os.environ['token']
 
 # When the Bot RUN -> Status Change
 @client.event
 async def on_ready():
     print(client.user.name, 'has connected to Discord!')
-    await client.change_presence(status=discord.Status.online, activity=discord.Game("!도움말"))
+    await client.change_presence(status=discord.Status.online, activity=discord.Game("업데이트"))
     print("[Bot : ready]")
 
 
@@ -227,24 +228,50 @@ async def 전적(ctx, summonerName):
 
 
 @client.command()
-async def 팀(ctx, name):
-    list = name.split(',')
-    endList1 = []
-    endList2 = []
-    if len(list) % 2 != 0:
-        await ctx.send("인원이 맞지 않습니다")
+async def 팀(ctx, teams, name):
+    tList = teams.split(',')
+    nList = name.split(',')
+
+    tlen = len(tList)
+    nlen = len(nList)
+    teamMax = nlen / tlen
+
+    if nlen % tlen != 0:
+        await ctx.send("입력을 확인해 주세요")
         return None
+    
+    embed = discord.Embed(title="팀 선정 결과", color=0xff00ff)
+    tmpList = []
 
-    for i in range(len(list)):
-        if random.randrange(1,3) == 1 and len(endList1) < len(list) / 2:
-            endList1.append(list[i])
-        else:
-            endList2.append(list[i])
-
-    embed = discord.Embed(title="사다리 결과", color=0x00ff00)
-    embed.add_field(name="1팀", value='\n'.join(endList1), inline=False)
-    embed.add_field(name="2팀", value='\n'.join(endList2), inline=False)
+    count = 0
+    for i in range(0, nlen):
+        ind = random.randrange(0, nlen)
+        tmpList.append(nList[ind])
+        del nList[nList.index(nList[ind])]
+        nlen = len(nList)
+        if len(tmpList) == teamMax:
+            embed.add_field(name=f"{tList[count]}", value=' '.join(tmpList), inline=False)
+            count += 1
+            tmpList.clear()
+    
     await ctx.send(embed=embed)
+
+    # endList1 = []
+    # endList2 = []
+    # if len(list) % 2 != 0:
+    #     await ctx.send("인원이 맞지 않습니다")
+    #     return None
+
+    # for i in range(len(list)):
+    #     if random.randrange(1,3) == 1 and len(endList1) < len(list) / 2:
+    #         endList1.append(list[i])
+    #     else:
+    #         endList2.append(list[i])
+
+    # embed = discord.Embed(title="팀 분배 결과", color=0x00ff00)
+    # embed.add_field(name="1팀", value='\n'.join(endList1), inline=False)
+    # embed.add_field(name="2팀", value='\n'.join(endList2), inline=False)
+    # await ctx.send(embed=embed)
 
 
 
