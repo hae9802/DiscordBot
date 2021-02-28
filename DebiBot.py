@@ -256,25 +256,6 @@ async def 팀(ctx, teams, name):
     
     await ctx.send(embed=embed)
 
-    # endList1 = []
-    # endList2 = []
-    # if len(list) % 2 != 0:
-    #     await ctx.send("인원이 맞지 않습니다")
-    #     return None
-
-    # for i in range(len(list)):
-    #     if random.randrange(1,3) == 1 and len(endList1) < len(list) / 2:
-    #         endList1.append(list[i])
-    #     else:
-    #         endList2.append(list[i])
-
-    # embed = discord.Embed(title="팀 분배 결과", color=0x00ff00)
-    # embed.add_field(name="1팀", value='\n'.join(endList1), inline=False)
-    # embed.add_field(name="2팀", value='\n'.join(endList2), inline=False)
-    # await ctx.send(embed=embed)
-
-
-
 # # reaction added Event
 # @client.event
 # async def on_reaction_add(reaction, user):
