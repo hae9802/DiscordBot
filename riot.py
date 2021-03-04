@@ -26,3 +26,18 @@ def get_summonerRank(summoner):
         print(req.status_code)
         return req.status_code
     
+def get_gameId(summonerId):
+    url = f"{HEADURL}/lol/match/v4/matchlists/by-account/{summonerId}/?api_key={API_KEY}"
+    req = requests.get(url)
+    if req.status_code == 200:
+        return req.json()
+    else:
+        return req.status_code
+
+def get_match(gameId):
+    url = f"{HEADURL}lol/match/v4/matches/{gameId}/?api_key={API_KEY}"
+    req = requests.get(url)
+    if req.status_code == 200:
+        return req.json()
+    else:
+        return req.status_code

@@ -167,6 +167,7 @@ async def 도움말(ctx):
     embed.add_field(name="프로필확인", value="사용 방법 : !사진 @mention", inline=False)
     embed.add_field(name="전적검색", value="사용 방법 : !전적 소환사이름", inline=False)
     embed.add_field(name="팀 분배", value="사용 방법 : !팀 팀수 이름,이름...,이름 (이름을 콤마로 이어주세요)", inline=False)
+    embed.add_field(name="룰렛", value="사용 방법 : !룰렛 a,b,c,d...", inline=False)
 
     embed.set_thumbnail(url=" https://han.gl/RYcbw")
     try:
@@ -203,7 +204,9 @@ async def 전적(ctx, summonerName):
         embed = discord.Embed(title="API KEY GENERATE", description="API KEY 갱신이 필요합니다", color=0x00ffff)
         await ctx.send(embed=embed)
         return None
-
+    
+    Aci = Si['accountId']
+    gameId = riot.get_gameId(Aci)
 
     Sr = riot.get_summonerRank(Si['id'])
     if not Sr:
@@ -224,8 +227,26 @@ async def 전적(ctx, summonerName):
             value=f"{i['wins'] + i['losses']}전 {i['wins']}승 {i['losses']}패 ({round(i['wins']/(i['wins'] + i['losses']) * 100, 2)}%) ", inline=False)
         embed.set_thumbnail(url=f"http://z.fow.kr/img/emblem/{i['tier'].lower()}.png")
         await ctx.send(embed=embed)
+    
+    # 전판 정보 출력
 
 
+@client.command()
+async def 한화의김성근(ctx):
+    embed = discord.Embed(title="감독님 사랑해", color=0x00ffff)
+    embed.set_image(url="https://han.gl/zdeJ4")
+    await ctx.send(embed=embed)
+
+@client.command()
+async def 룰렛(ctx, menu):
+    Lmenu = menu.split(',')
+    per = 1 / len(Lmenu) * 100
+    pick = Lmenu[random.randrange(0, len(Lmenu))]
+    del Lmenu[Lmenu.index(pick)]
+    embed = discord.Embed(title=f"룰렛 결과", description=f"각 확률 : {round(per, 2)}%", color=0xffff00)
+    embed.add_field(name="당첨", value=pick, inline=False)
+    embed.add_field(name="실패 목록", value=" ".join(Lmenu), inline=False)
+    await ctx.send(embed=embed)
 
 @client.command()
 async def 팀(ctx, teams: int, name):
