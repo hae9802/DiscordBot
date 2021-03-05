@@ -177,13 +177,6 @@ async def 도움말(ctx):
         await ctx.send(f"{ctx.message.author.mention}님 서버 이름 클릭 - 개인정보 보호 설정 - 서버 멤버가 보내는 개인 메시지 허용해주세요.")
 
 
-# for Develop Command
-@client.command()
-async def dev(ctx):
-    print(client.user)
-    print(ctx.message.channel.last_message.author)
-
-
 # !사진 -> ex) !사진 @mention
 @client.command()
 async def 사진(ctx, user: discord.User):
@@ -274,6 +267,17 @@ async def 팀(ctx, teams: int, name):
             tmpList.clear()
     
     await ctx.send(embed=embed)
+
+@client.event
+async def on_message(msg):
+    if "재민아" in msg.content or "박재민" in msg.content:
+        await msg.channel.send(f"{msg.author.mention} <- 얘가 너 부름\n<@!271252471744036864>")
+    await client.process_commands(msg)
+
+# for Develop Command
+@client.command()
+async def dev(ctx, id):
+    print(id)
 
 # # reaction added Event
 # @client.event
