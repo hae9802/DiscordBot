@@ -3,11 +3,11 @@ import discord
 import asyncio
 import random
 from discord import embeds
+from discord import activity
 from discord.ext.commands import bot
-import datetime
+import time
 import riot
 import os
-
 
 from discord.activity import Activity, CustomActivity
 from discord.enums import ActivityType
@@ -22,7 +22,8 @@ token = os.environ['token']
 async def on_ready():
     print(client.user.name, 'has connected to Discord!')
     await client.change_presence(status=discord.Status.online, activity=discord.Game("!도움말"))
-    print("[Bot : ready]")
+    print(f"[{client.user.display_name} : I'm ready]")
+
 
 
 # !배팅 -> ex) !배팅 주제 
@@ -199,8 +200,8 @@ async def 전적(ctx, summonerName):
         return None
     
     Aci = Si['accountId']
-    gameId = riot.get_gameId(Aci)
 
+    # 소환사 정보 출력
     Sr = riot.get_summonerRank(Si['id'])
     if not Sr:
         embed = discord.Embed(title=Si['name'], color=0x00ffff)
@@ -222,7 +223,6 @@ async def 전적(ctx, summonerName):
         await ctx.send(embed=embed)
     
     # 전판 정보 출력
-
 
 @client.command()
 async def 한화의김성근(ctx):
@@ -272,7 +272,12 @@ async def 팀(ctx, teams: int, name):
 async def on_message(msg):
     if "재민아" in msg.content or "박재민" in msg.content:
         await msg.channel.send(f"{msg.author.mention} <- 얘가 너 부름\n<@!271252471744036864>")
+    if msg.content.startswith("!help"):
+        return None    
     await client.process_commands(msg)
+
+    
+        
 
 # for Develop Command
 @client.command()
