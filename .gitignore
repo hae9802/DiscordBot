@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 
 
-
+debibotC.py
+riotC.py
 token.txt
