@@ -266,11 +266,13 @@ async def 팀(ctx, teams: int, name):
             count += 1
             tmpList.clear()
     
-    await ctx.send(embed=embed)
+    await ctx.send(embed=embed)  
+        
+
 
 @client.event
 async def on_message(msg):
-    if "재민아" in msg.content or "박재민" in msg.content:
+    if "재민아" in msg.content or "박재민" in msg.content and not msg.content.startswith("!"):
         await msg.channel.send(f"{msg.author.mention} <- 얘가 너 부름\n<@!271252471744036864>")
     if msg.content.startswith("!help"):
         return None    
