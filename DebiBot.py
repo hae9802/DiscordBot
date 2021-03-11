@@ -169,6 +169,7 @@ async def 도움말(ctx):
     embed.add_field(name="전적검색", value="사용 방법 : !전적 소환사이름", inline=False)
     embed.add_field(name="팀 분배", value="사용 방법 : !팀 팀수 이름,이름...,이름 (이름을 콤마로 이어주세요)", inline=False)
     embed.add_field(name="룰렛", value="사용 방법 : !룰렛 a,b,c,d...", inline=False)
+    embed.add_field(name="사다리", value="사용 방법 : !사다리 종류,... 인원,...", inline=False)
 
     embed.set_thumbnail(url=" https://han.gl/RYcbw")
     try:
@@ -267,18 +268,38 @@ async def 팀(ctx, teams: int, name):
             tmpList.clear()
     
     await ctx.send(embed=embed)  
-        
 
+@client.command()
+async def 사다리(ctx, klist, plist):
+    klist = klist.split(",")
+    plist = plist.split(",")
+
+    klen = len(klist)
+    plen = len(plist)
+
+    if plen != klen:
+        await ctx.send("인원을 확인해 주세요")
+        return None
+    
+    tlist = []
+    for k in range(0, klen):
+        prand = random.randrange(plen)
+        tlist.append(plist[prand])
+        del plist[prand]
+        plen = len(plist)
+        
+    embed = discord.Embed(title="사다리 결과", color=0x0000ff)
+    for idx, i in enumerate(klist):
+        embed.add_field(name=i, value=tlist[idx], inline=False)
+    await ctx.send(embed=embed)
 
 @client.event
 async def on_message(msg):
     if "재민아" in msg.content or "박재민" in msg.content and not msg.content.startswith("!"):
         await msg.channel.send(f"{msg.author.mention} <- 얘가 너 부름\n<@!271252471744036864>")
     if msg.content.startswith("!help"):
-        return None    
+        return None
     await client.process_commands(msg)
-
-    
         
 
 # for Develop Command
